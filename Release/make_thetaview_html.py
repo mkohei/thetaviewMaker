@@ -41,7 +41,7 @@ ul.thumbnail {
     /* リストエリアの幅 */
     width: 100%;
     /* リストエリアの最小幅（不要な場合は削除）*/
-    min-width: 660px;
+    /* min-width: 660px; */
     margin: 0;
     /* リストエリアのパッディング（上、左右、下）*/
     padding: 30px 0 0;
@@ -51,9 +51,7 @@ ul.thumbnail {
 /* --- リスト項目 --- */
 ul.thumbnail li {
     /* 項目の幅 */
-    width: 30%;
-    /*width: 30%;*/
-    /*width: 100%;*/
+    width: 220px;
     float: left;
 }
 

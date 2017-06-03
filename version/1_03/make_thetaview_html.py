@@ -25,7 +25,7 @@ Kohei Matsumoto
     - filename, description を fn, desc でも可に
 * 1.03 (2017/06/02)
     - layout 微修正 (thetaview/index.html の話)
-    - リスト表示の幅による列挙個数の調整表示
+    - pics, view ディレクトリ内部丸見え問題への対応
 
 """
 
