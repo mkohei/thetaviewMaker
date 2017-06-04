@@ -100,6 +100,6 @@ $python make_thetaview_html.py [dir_path] [title]
 - [x] layout の修正<br>
     メニューの iframe をコンテンツの iframe より前に持ってきて float を調整<br>
     min-width をつけることや js でウィンドウに合わせた横幅の調整<br>
-- [ ] 新レイアウトの作成
+- [x] 新レイアウトの作成
 - [ ] thetaview/index.html (複数のリストページまとめページ)の自動生成
 
