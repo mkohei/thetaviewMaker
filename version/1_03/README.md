@@ -1,5 +1,6 @@
-# make_pnrm_html.py
-全天球画像閲覧用WebページのHTMLコード自動生成スクリプト
+# thetaviewMaker
+Automatic generation script for omnidirectional image viewing page<br>
+(全天球画像閲覧用WebページのHTMLコード自動生成スクリプト)
 
 ## コマンド
 
@@ -62,11 +63,11 @@ $python make_thetaview_html.py [dir_path] [title]
 - [ ] .JPG への対応
 - [ ] 他の画像フォーマットへの対応 (JPG, jpg, PNG, png)
 - [ ] pics, view ディレクトリ内部丸見え問題への対応
-- [ ] リスト表示の幅による列挙個数の調整表示
+- [x] リスト表示の幅による列挙個数の調整表示
 - [x] リスト表示の際リサイズした画像を表示(通信量軽減)
 - [x] "filename", "description" を "fn", "desc" でも大丈夫にする(filename, description は長い)
 - [ ] JS の Warning を無くす (開発者ツールで確認)
-- [ ] layout の修正<br>
+- [x] layout の修正<br>
     メニューの iframe をコンテンツの iframe より前に持ってきて float を調整<br>
     min-width をつけることや js でウィンドウに合わせた横幅の調整<br>
 

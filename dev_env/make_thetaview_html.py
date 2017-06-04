@@ -23,6 +23,13 @@ Kohei Matsumoto
 * 1.02 (22017/05/20)
     - 一覧画面用に画像リサイズ
     - filename, description を fn, desc でも可に
+* 1.03 (2017/06/03)
+    - layout 微修正 (thetaview/index.html の話)
+    - リスト表示の幅による列挙個数の調整表示
+* 2.00 (2017/06/04)
+    - layout の大幅修正 (それに伴う setting.json 等の変更)
+    - setting.json の必須化(?)
+
 """
 
 import os
@@ -36,72 +43,82 @@ from tqdm import tqdm
 #####################
 
 CONTENT_CSS = """
-/* --- リストエリア --- */ 
-ul.thumbnail {
-    /* リストエリアの幅 */
-    width: 100%;
-    /* リストエリアの最小幅（不要な場合は削除）*/
-    min-width: 660px;
-    margin: 0;
-    /* リストエリアのパッディング（上、左右、下）*/
-    padding: 30px 0 0;
-    list-style-type: none;
-}
-
-/* --- リスト項目 --- */
-ul.thumbnail li {
-    /* 項目の幅 */
-    width: 30%;
-    /*width: 30%;*/
-    /*width: 100%;*/
-    float: left;
-}
-
-/* --- 項目内容 --- */
-ul.thumbnail dl {
-    /* 内容の幅 */
-    /*width: 142px;/*
+    /* --- リストエリア --- */
+    
+    ul.thumbnail {
+        /* リストエリアの幅 */
+        width: 100%;
+        /* リストエリアの最小幅（不要な場合は削除）*/
+        /* min-width: 660px; */
+        margin: 0;
+        /* リストエリアのパッディング（上、左右、下）*/
+        /* padding: 30px 0 0; */
+        list-style-type: none;
+    }
+    /* --- リスト項目 --- */
+    
+    ul.thumbnail li {
+        /* 項目の幅 */
+        width: 220px;
+        float: left;
+    }
+    /* --- 項目内容 --- */
+    
+    ul.thumbnail dl {
+        /* 内容の幅 */
+        /*width: 142px;/*
     width: 30%
     /* 内容のセンタリング */
-    margin: 0 auto;
-    font-size: 80%;
-}
-
-/* --- 写真エリア --- */
-ul.thumbnail dt {
-    /* 写真エリアの高さ（dt要素の高さを指定する場合）*/
-    /*height: 102px;*/
-    /* 写真エリアの下マージン */
-    margin-bottom: 5px;
-}
-ul.thumbnail dt img {
-    /* 写真の境界線 */
-    border: 1px #808080 solid;
-}
-
-/* --- キャプションエリア ---*/
-ul.thumbnail dd {
-    /* キャプションエリアのマージン（上、左右、下）*/
-    margin: 0 0 3px;
-    /* キャプションエリアの高さ */
-    height: 6.5em;
-    line-height: 120%
-}
-
-/* --- clearfix --- */
-.clearFix:after {
-    content: ". ";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-.clearFix {
-    min-height: 1px;
-}
+        margin: 0 auto;
+        font-size: 80%;
+    }
+    /* --- 写真エリア --- */
+    
+    ul.thumbnail dt {
+        /* 写真エリアの高さ（dt要素の高さを指定する場合）*/
+        /*height: 102px;*/
+        /* 写真エリアの下マージン */
+        /* margin-bottom: 5px; */
+    }
+    
+    ul.thumbnail dt img {
+        /* 写真の境界線 */
+        border: 1px #808080 solid;
+    }
+    /* --- キャプションエリア ---*/
+    
+    ul.thumbnail dd {
+        /* キャプションエリアのマージン（上、左右、下）*/
+        margin: 0 0 3px;
+        /* キャプションエリアの高さ */
+        height: 6.5em;
+        line-height: 120%
+    }
+    /* --- clearfix --- */
+    
+    .clearFix:after {
+        content: ". ";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    
+    .clearFix {
+        min-height: 1px;
+    }
+    
+    hr.bigline {
+        width: 50%;
+        margin-bottom: 60px;
+    }
+    
+    h3.smalltitle {
+        margin-top: 30px;
+    }
 """
 
-# CONTENT_HTML % (title, date, title, list_item<li>)
+# CONTENT_HTML % (title, date, title, big_titles)
 CONTENT_HTML = """
 <!DOCTYPE html>
 <html>
@@ -116,14 +133,37 @@ CONTENT_HTML = """
         <font size="4">Updated on %s</font><br/>
         <font size="2">Scripted by Kohei Matsumoto</font>
     </div>
-    <h2>%s</h2>
-    <ul class="thumbnail clearFix">
+    <h1>%s</h1>
+    <hr size="3" color="black">
     %s
-    </ul>
     <br><br>
     VR対応ブラウザでご覧ください (対応確認済ブラウザ：Chrome, Firefox, Edge, Safari)
 </body>
 </html>
+"""
+
+# BIGTITLE_HTML % (big_title, small_titles)
+BIGTITLE_HTML = """
+<h2>%s</h2>
+%s
+<hr class="bigline" align="left">
+"""
+
+# SMALLTITLE_HTML % (small_title, image_items)
+SMALLTITLE_HTML = """
+<h3 class="smalltitle">%s</h3>
+<ul class="thumbnail clearFix">
+%s
+</ul>
+"""
+
+# IMAGE_ITEM_HTML % (name(html_path), name(img_path))
+IMAGE_ITEM_HTML = """
+<li>
+    <dl>
+        <dt><a href="view/%s.html" target="_top"><img src="resize/%s.jpg" alt="Photo" width="200" height="100"></a></dt>
+    </dl>
+</li>
 """
 
 #ITEM_HTML % (name(html_path), name(img_path), name(html_path), name(title), description)
@@ -162,22 +202,36 @@ CONTENT_HTML_VIEW = """
 ######################
 
 def makecss(path):
-    """ makecss 関数
-            生成する HTML コードに伴う CSS ファイルを作成
-        * out : void
-        * path : CSS ファイル作成先ディレクトリのパス
+    """ 生成する HTML コードに伴う CSS ファイルを作成
+
+        Parameters
+        ----------
+        * path: CSS ファイル作成先ディレクトリのパス
+
+        Returns
+        -------
+        * void
+
     """
     csspath = '%s/list.css' % path
     #os.system('touch %s' % csspath)
     open(csspath, 'w').write(CONTENT_CSS)
     return
 
-def makehtml(imgs, path, title=None):
-    """ makehtml 関数
-            パノラマ画像閲覧のための HTML コードの生成
-        * out : void
-        * igms : 画像一覧(thumbnail)に入れる画像のパラメタのリスト
+
+def makehtml_old(imgs, path, title=None):
+    """ パノラマ画像閲覧のための HTML コードの生成
+
+        Parameters
+        ----------
+        * igms: 画像一覧(thumbnail)に入れる画像のパラメタのリスト
             --> [(name, description), ...]
+        * path: HTML ファイル作成先ディレクトリのパス
+        * title: ページタイトル
+
+        Returns
+        -------
+        * void
     """
     title = title if title is not None else 'untitled'
     if os.path.exists('%s/view' % path) is False:
@@ -192,6 +246,126 @@ def makehtml(imgs, path, title=None):
 
     # generate HTML file (view list)
     open('%s/index.html' % path, 'w').write(CONTENT_HTML % (title, str(datetime.date.today()), title, list_items))
+    return
+
+
+def make_smalltitle(smalltitle, imgs):
+    """ small_title 部分の HTML コードを作成
+
+        Paramters
+        ---------
+        * smalltitle: str
+            small title
+        * imgs: str array
+            表示する画像ファイル名リスト (without extension)
+
+        Returns
+        ----
+        * stcode: small_title 部分の HTML コード
+    """
+    img_items = ""
+    for imgname in imgs:
+        img_items += IMAGE_ITEM_HTML % (imgname, imgname)
+    return SMALLTITLE_HTML % (smalltitle, img_items)
+
+
+def make_bigtitle(bigtitle, smalltitle_codes):
+    """ big_title 部分の HTML コードの作成
+
+        Parameters
+        ----------
+        * bigtitle: str
+            big title
+        * smalltitle_codes: str array
+            small title 部分の HTML コードのリスト
+
+        Returns
+        -------
+        * btcode: big_title 部分の HTML コード
+    """
+    smalltitles = ""
+    for stcode in smalltitle_codes:
+        smalltitles += stcode
+    return BIGTITLE_HTML % (bigtitle, smalltitles)
+
+
+def makehtml(path, bigtitle_codes, title=None):
+    """ パノラマ画像閲覧用のための HTML コードの生成
+
+        Parameters
+        ----------
+        * path: str
+            ファイルを作成するディレクトリへのパス
+        * bigtitle_codes: str array
+            big title 部分の HTML コードリスト
+        * title: str
+            ページタイトル
+
+        Returns
+        -------
+        * void
+    """
+    # conmfirmation of title is defined or not
+    title = title if title is not None else 'untitled'
+
+    bigtitles = ""
+    for btcode in bigtitle_codes:
+        bigtitles += btcode
+
+    # generate HTML file (view list)
+    open('%s/index.html' % path, 'w').write(CONTENT_HTML % (title, str(datetime.date.today()), title, bigtitles))
+    return
+
+
+def resize(path, imgs):
+    """ リサイズ
+
+        Parameters
+        ----------
+        * path: resize ディレクトリを置くディレクトリへのパス
+        * imgs: リサイズする画像のリスト
+
+        Returns
+        -------
+        * void
+    """
+    # resize image directory
+    if os.path.exists('%s/resize' % path) is False:
+        os.system('mkdir %s/resize' % path)
+
+    #pbar = tqdm(total=len(imgs))
+    for img in imgs:
+        #pbar.set_description("resizing")
+        #pbar.update(1)
+
+        # resize
+        file = img + ".jpg"
+        os.system('convert -resize 200x %s/pics/%s %s/resize/%s' % (path, file, path, file))
+    return
+
+
+def make_view(path, imgs):
+    """ 全天球閲覧ページの作成
+
+        Parameters
+        ----------
+        * path: view ディレクトリを置くディレクトリへのパス
+        * imgs: 閲覧ページで表示する画像リスト
+
+        Returns
+        -------
+        * void
+    """
+    # view directory
+    if os.path.exists('%s/view' % path) is False:
+        os.system('mkdir %s/view' % path)
+
+    #pbar = tqdm(total=len(imgs))
+    for img in imgs:
+        #pbar.set_description("making view")
+        #pbar.update(1)
+
+        open('%s/view/%s.html' % (path, img), 'w').write(CONTENT_HTML_VIEW % (img, img))
     return
 
 
@@ -236,74 +410,65 @@ if __name__ == '__main__':
         except json.decoder.JSONDecodeError:
             print("[Warning] raised JSON Decode Error.")
             SETTING = None
-
-
-    ### --- generate HTML (and CSS)--- ###
-    # prepate imgs (image parameter array) to use argument of makehtml function
-    img_list = []
-
-    # load json and files
-    names_list = []
-    if SETTING is not None:
-        # load setting (JSON)
-        for params in SETTING:
-            # Comfirm existence of key `name`
-            if 'filename' in params:
-                name = params['filename']
-            elif 'fn' in params:
-                name = params['fn']
-            else:
-                print("[Name Key Existence Error] `filename` key is undefined.")
-                continue
-            names_list.append(name)
-
-            # Confirm existence of key `description`
-            if 'description' in params:
-                description = params['description']
-            elif 'desc' in params:
-                description = params['desc']
-            else:
-                print("[Warning] `description` key is not undefined. (filename:%s)" % name)
-                description = None
-            img_list.append((name, description))
-
-    # resize image directory
-    if os.path.exists('%s/resize' % PATH) is False:
-        os.system('mkdir %s/resize' % PATH)
-
-    # search files (pics directory)
-    files = os.listdir('%s/pics/' % PATH)
-    pbar = tqdm(total=len(files))
-    for file in files:
-        pbar.set_description("resizing")
-        pbar.update(1)
-
-        # do processing only JPEG file (you cat change only JPEG file -> image files) (:*1)
-        #if not file[-4:] in [".JPG", ".jpg", ".png", ".PNG"]:
-        if not file[-4:] == ".jpg":
-            continue
-
-        # resize
-        os.system('convert -resize 200x %s/pics/%s %s/resize/%s' % (PATH, file, PATH, file))
-
-        # ignore the files included in the SETTING(setting.json)
-        if file[:-4] in names_list:
-            continue
-        img_list.append((file[:-4], None))
+            sys.exit()
 
     # get page title from command-line arguments
     if len(sys.argv) > 2:
         TITLE = sys.argv[2]
     else:
-        print("[Warning] Page title is not entered")
+        print("[Warning] Page title is not entered.")
         TITLE = None
 
-    # generate HTML file
-    makehtml(imgs=img_list, path=PATH, title=TITLE)
+    ### --- generate HTML (and CSS)--- ###
+    # lists
+    allimgs, bigtitle_codes = [], []
 
-    # gennerate CSS file
+    # load setting (JSON)
+    for bt_params in SETTING:
+        # big title
+        if 'bigtitle' in bt_params:
+            bigtitle = bt_params['bigtitle']
+        elif 'b' in bt_params:
+            bigtitle = bt_params['b']
+        else:
+            print("[Name Key Existence Error] `bigtitle` key is undefined.")
+            continue
+
+        # contents (small title list)
+        if 'contents' in bt_params:
+            contents = bt_params['contents']
+        elif 'c' in bt_params:
+            contents = bt_params['c']
+        else:
+            ...
+        smalltitle_codes = []
+        for st_params in contents:
+            # small title
+            if 'smalltitle' in st_params:
+                smalltitle = st_params['smalltitle']
+            elif 's' in st_params:
+                smalltitle = st_params['s']
+            else:
+                print("[Name Key Existence Error] `smalltitle` key is undefined.")
+                continue
+            # imgs
+            if 'images' in st_params:
+                imgs = st_params['images']
+            elif 'i' in st_params:
+                imgs = st_params['i']
+            allimgs.extend(imgs)
+            smalltitle_codes.append(
+                make_smalltitle(smalltitle, imgs)
+            )
+        bigtitle_codes.append(
+            make_bigtitle(bigtitle, smalltitle_codes)
+        )
+
+    # generate
+    makehtml(PATH, bigtitle_codes, TITLE)
     makecss(PATH)
-
+    make_view(PATH, allimgs)
+    resize(PATH, allimgs)
 
     ### --- complete --- ###
     print('complete')
