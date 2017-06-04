@@ -2,6 +2,10 @@
 Automatic generation script for omnidirectional image viewing page<br>
 (全天球画像閲覧用WebページのHTMLコード自動生成スクリプト)
 
+## versino
+* 1.x: 
+* 2.x: 
+
 ## コマンド
 
 ```
@@ -25,10 +29,16 @@ $python make_thetaview_html.py [dir_path] [title]
 
 ## その他処理について
 * 設定ファイル `setting.json` により表示内容の設定が可能<br>
-    * `filename` or `fn` : 画像ファイル名 and 表示名
-    * `description` or `desc` : 画像の説明 (なくても良い)
+    * ~~`filename` or `fn` : 画像ファイル名 and 表示名~~
+    * ~~`description` or `desc` : 画像の説明 (なくても良い)~~
+    * `bigtitle` or `bt` or `b` : Big Title
+    * `contents` or `c` : Contents
+    * `smalltitle` or `st` or `s` : Small Title
+    * `images` or `i` : omnidirectinal image file name (without extension)
+    * bigtitle, smalltitle を設定しない場合は `other` となる
+    
 
-    例)
+旧例)
 
 ```
 [
@@ -46,7 +56,27 @@ $python make_thetaview_html.py [dir_path] [title]
 ]
 ```
 
-* 説明 (description) が必要なくても、画像の表示順を設定したい場合も `setting.json` を記述する必要がある
+新例)
+
+```
+[
+    {
+        "bigtitle" : "BIG_TITLE_1",
+        "contents" : [
+            {
+                "smalltitle" : "SMALL_TITLE_1",
+                "images" : ["img1", "img2"]
+            }
+        ]
+    },
+    {"b":"BIG", "c":[
+        {"s":"SMALL1", "i":["1", "2", "3", "4"]},
+        {"s":"SMALL2", "i":["5", "6", "7", "8"]}
+    ]}
+]
+```
+
+* ~~説明 (description) が必要なくても、~~ 画像の表示順を設定したい場合は `setting.json` を記述する必要がある
 * まず `setting.json` の記述順に表示され、その後それ以外の画像を名前順に表示される
 
 ## 注意
@@ -70,5 +100,6 @@ $python make_thetaview_html.py [dir_path] [title]
 - [x] layout の修正<br>
     メニューの iframe をコンテンツの iframe より前に持ってきて float を調整<br>
     min-width をつけることや js でウィンドウに合わせた横幅の調整<br>
-
+- [ ] 新レイアウトの作成
+- [ ] thetaview/index.html (複数のリストページまとめページ)の自動生成
 

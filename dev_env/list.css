@@ -1,62 +1,74 @@
 
-/* --- リストエリア --- */ 
-ul.thumbnail {
-    /* リストエリアの幅 */
-    width: 100%;
-    /* リストエリアの最小幅（不要な場合は削除）*/
-    /* min-width: 660px; */
-    margin: 0;
-    /* リストエリアのパッディング（上、左右、下）*/
-    padding: 30px 0 0;
-    list-style-type: none;
-}
-
-/* --- リスト項目 --- */
-ul.thumbnail li {
-    /* 項目の幅 */
-    width: 220px;
-    float: left;
-}
-
-/* --- 項目内容 --- */
-ul.thumbnail dl {
-    /* 内容の幅 */
-    /*width: 142px;/*
+    /* --- リストエリア --- */
+    
+    ul.thumbnail {
+        /* リストエリアの幅 */
+        width: 100%;
+        /* リストエリアの最小幅（不要な場合は削除）*/
+        /* min-width: 660px; */
+        margin: 0;
+        /* リストエリアのパッディング（上、左右、下）*/
+        /* padding: 30px 0 0; */
+        list-style-type: none;
+    }
+    /* --- リスト項目 --- */
+    
+    ul.thumbnail li {
+        /* 項目の幅 */
+        width: 220px;
+        float: left;
+    }
+    /* --- 項目内容 --- */
+    
+    ul.thumbnail dl {
+        /* 内容の幅 */
+        /*width: 142px;/*
     width: 30%
     /* 内容のセンタリング */
-    margin: 0 auto;
-    font-size: 80%;
-}
-
-/* --- 写真エリア --- */
-ul.thumbnail dt {
-    /* 写真エリアの高さ（dt要素の高さを指定する場合）*/
-    /*height: 102px;*/
-    /* 写真エリアの下マージン */
-    margin-bottom: 5px;
-}
-ul.thumbnail dt img {
-    /* 写真の境界線 */
-    border: 1px #808080 solid;
-}
-
-/* --- キャプションエリア ---*/
-ul.thumbnail dd {
-    /* キャプションエリアのマージン（上、左右、下）*/
-    margin: 0 0 3px;
-    /* キャプションエリアの高さ */
-    height: 6.5em;
-    line-height: 120%
-}
-
-/* --- clearfix --- */
-.clearFix:after {
-    content: ". ";
-    display: block;
-    height: 0;
-    clear: both;
-    visibility: hidden;
-}
-.clearFix {
-    min-height: 1px;
-}
+        margin: 0 auto;
+        font-size: 80%;
+    }
+    /* --- 写真エリア --- */
+    
+    ul.thumbnail dt {
+        /* 写真エリアの高さ（dt要素の高さを指定する場合）*/
+        /*height: 102px;*/
+        /* 写真エリアの下マージン */
+        /* margin-bottom: 5px; */
+    }
+    
+    ul.thumbnail dt img {
+        /* 写真の境界線 */
+        border: 1px #808080 solid;
+    }
+    /* --- キャプションエリア ---*/
+    
+    ul.thumbnail dd {
+        /* キャプションエリアのマージン（上、左右、下）*/
+        margin: 0 0 3px;
+        /* キャプションエリアの高さ */
+        height: 6.5em;
+        line-height: 120%
+    }
+    /* --- clearfix --- */
+    
+    .clearFix:after {
+        content: ". ";
+        display: block;
+        height: 0;
+        clear: both;
+        visibility: hidden;
+    }
+    
+    .clearFix {
+        min-height: 1px;
+    }
+    
+    hr.bigline {
+        width: 50%;
+        margin-bottom: 60px;
+    }
+    
+    h3.smalltitle {
+        margin-top: 30px;
+    }
