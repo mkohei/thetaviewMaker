@@ -2,82 +2,62 @@
 Automatic generation script for omnidirectional image viewing page<br>
 (全天球画像閲覧用WebページのHTMLコード自動生成スクリプト)
 
-## 概要
-全天球画像をaframeを持ちて閲覧するための、一覧ページのコード自動生成スクリプト．picsディレクトリの中にある全天球画像群を, `setting.json`で指定された設定によって一覧表示ページコードを生成する．
+## versino
+* 1.x: `setting.json`非不可欠、一覧
+* 2.x: `setting.json`不可欠、bigtitle, smalltitle
 
-## version
-### 1.x
-#### 表示形式
-* ページタイトル
-* 画像一覧 : 画像一枚それぞれにタイトルを付けられる
-#### 入力
-* コマンド
+## コマンド
+
 ```
 $python make_thetaview_html.py [dir_path] [title]
 ```
-* setting.jon
+
+* python 3.x 使用
+* [dir_path] : 生成先のディレクトリのパス
+* [title] : 生成する Web ページのタイトル<br>
+    指定しなくても良い (その場合 `untitled` になる)
+
+## 前提条件
+* 生成先のディレクトリに `pics` ディレクトリが存在すること<br>
+    `pics` ディレクトリに表示させたい画像を置く
+
+## 処理結果
+* リストページ `index.html` ファイル生成
+* リストページ用スタイルシート `list.css` ファイル生成
+* 閲覧ページ群 `view` ディレクトリ生成
+* 閲覧ページ `[title].html` ファイルの生成
+
+## その他処理について
+* 設定ファイル `setting.json` により表示内容の設定が可能<br>
+    * ~~`filename` or `fn` : 画像ファイル名 and 表示名~~
+    * ~~`description` or `desc` : 画像の説明 (なくても良い)~~
+    * `bigtitle` or `bt` or `b` : Big Title
+    * `contents` or `c` : Contents
+    * `smalltitle` or `st` or `s` : Small Title
+    * `images` or `i` : omnidirectinal image file name (without extension)
+    * bigtitle, smalltitle を設定しない場合は `other` となる
+    
+
+旧例)
+
 ```
 [
     {
-        "filename" : "title1",
-        "description" : "説明1"
+        "filename" : "test1",
+        "description" : "説明１"
     },
-    {"fn":"title2", "desc":"説明2"},
-    {"fn":"title3"},
-    ...
-]
-```
-* ファイル構造
-```
-[dir]
--- [pics]
--- setting.json
-```
-
-### 2.x
-#### 表示形式
-* ページタイトル
-* 大タイトル, 小タイトルがあり, 小タイトルの中に画像一覧が並ぶ
-#### 入力
-* コマンド
-```
-$python make_thetaview_html.py [dir_path] [title]
-```
-* setting.json
-```
-[
     {
-        "bigtitle" : "BIG_TITLE_1",
-        "contents" : [
-            {
-                "smalltitle" : "SMALL_TITLE_1",
-                "images" : ["img1", "img2"]
-            }
-        ]
+        "fn" : "test3",
+        "desc" : "説明３"
     },
-    {"b":"BIG", "c":[
-        {"s":"SMALL1", "i":["1", "2", "3", "4"]},
-        {"s":"SMALL2", "i":["5", "6", "7", "8"]}
-    ]}
+    {
+        "fn" : "test4",
+    }
 ]
 ```
-* ファイル構造
-```
-[dir]
--- [pics]
--- setting.json
-```
 
-### 3.x
-#### 表示形式
-* 2.x の集まりが対象
-* メニューバーで[dir], [smalltitle]を選択可能に
-#### 入力
-* コマンド
-```
-$python make_thetaview_html.py [dir_path] [title]
-```
-* setting.json
+新例)
+
 ```
 [
     {
@@ -95,17 +75,9 @@ $python make_thetaview_html.py [dir_path] [title]
     ]}
 ]
 ```
-* ファイル構造
-```
-[target]
--- [dir1]
-   -- [pics]
-   -- setting.json
--- [dir2]
-   -- [pics]
-   -- setting.json
-...
-```
+
+* ~~説明 (description) が必要なくても、~~ 画像の表示順を設定したい場合は `setting.json` を記述する必要がある
+* まず `setting.json` の記述順に表示され、その後それ以外の画像を名前順に表示される
 
 ## 注意
 * MAC OS X 濁点問題<br>
@@ -114,7 +86,7 @@ $python make_thetaview_html.py [dir_path] [title]
     view ディレクトリに index.html(or .php)がないため、ディレクト内部が丸見えである.とりあえず、chmod コマンド等でパーミッションを変えておく.<br>
     今後, このコード内で pics, view ディレクトリ用の index.html を作成する方向でも考える. 
 * アップロードした画像のパーミッション<br>
-    アップロートした画像のパーミッションが 400とかだと見れないので注意．0644とかに変更する．
+    アップロートした画像のパーミッションが 0400とかだと見れないので注意．0644とかに変更する．
 
 ## TODO
 - [ ] MAC OS X ファイル名濁点問題への対応

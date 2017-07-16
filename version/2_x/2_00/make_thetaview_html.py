@@ -333,10 +333,10 @@ def resize(path, imgs):
     if os.path.exists('%s/resize' % path) is False:
         os.system('mkdir %s/resize' % path)
 
-    #pbar = tqdm(total=len(imgs))
+    pbar = tqdm(total=len(imgs))
     for img in imgs:
-        #pbar.set_description("resizing")
-        #pbar.update(1)
+        pbar.set_description("resizing")
+        pbar.update(1)
 
         # resize
         file = img + ".jpg"
