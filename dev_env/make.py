@@ -35,6 +35,8 @@ Kohei Matsumoto
     - 正規表現使用可
 * 3.01 (2018/04/12)
     - 'Last Updated'の追加
+* 3.02 (2018/04/12)
+    - Menuが長いと省略し一行で表示
 """
 
 
@@ -54,6 +56,7 @@ from datetime import datetime   # update date & time
 ###############################
 EXIF_MODEL = 272
 THUMBNAIL_LEN = 200
+MENU_MAX_LEN = 15
 
 
 
@@ -206,7 +209,7 @@ def make_page_item(url, name, secitems):
         </ul>
         </li>
     """
-    return source.format(url, name, secitems)
+    return source.format(url, make_abbreviation(name), secitems)
 
 
 def make_sec_item(num, name):
@@ -214,7 +217,7 @@ def make_sec_item(num, name):
     source = """
         <li><a class="drawer-dropdown-menu-item" href="#{}">{}</a></li>
     """
-    return source.format(num, name)
+    return source.format(num, make_abbreviation(name))
 
 
 def make_html_source(title, nav, content):
@@ -267,6 +270,12 @@ def make_html_source(title, nav, content):
         }}
         h2 {{
         margin: 20px 0 0 10vw;
+        }}
+        a.drawer-dropdown-menu-item {{
+        white-space: nowrap;
+        }}
+        a.drawer-menu-item {{
+        white-space: nowrap;
         }}
         </style>
         <body class="drawer drawer--left">
@@ -387,6 +396,14 @@ def make_theta_view_source(PATH, filename):
         </html>
     """
     return source.format(filename, filename)
+
+
+def make_abbreviation(name):
+    if len(name) > MENU_MAX_LEN:
+        return name[:MENU_MAX_LEN] + "..."
+    else:
+        return name[:]
+
 
 
 ##########################
