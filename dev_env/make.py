@@ -33,6 +33,8 @@ Kohei Matsumoto
     - pageから生成できるように
     - layout変更
     - 正規表現使用可
+* 3.01 (2018/04/12)
+    - 'Last Updated'の追加
 """
 
 
@@ -43,6 +45,7 @@ import json                 # json
 from tqdm import tqdm       # processing bar
 from PIL import Image       # make thumbs
 import re                   # regex
+from datetime import datetime   # update date & time
 
 
 
@@ -215,7 +218,7 @@ def make_sec_item(num, name):
 
 
 def make_html_source(title, nav, content):
-    # title, nav, content
+    # title, nav, datetime, content
     source = """
         <!DOCTYPE html>
         <html lang="ja">
@@ -257,7 +260,7 @@ def make_html_source(title, nav, content):
         br {{
         clear: left;
         }}
-        div {{
+        div.section {{
         clear: left;
         padding: 0;
         margin: 20px 0 20px 0;
@@ -280,7 +283,13 @@ def make_html_source(title, nav, content):
         </header>
         <main role="main">
         <!-- Page content -->
+        <div style="text-align: right">
+        Last Updated: {}
+        </div>
         {}
+        <div style="text-align: right; font-size: small;">
+        Scripted by Kohei Matsumoto
+        </div>
         </main>
         <script>
         $(document).ready(function() {{
@@ -290,7 +299,7 @@ def make_html_source(title, nav, content):
         </body>
         </html>
     """
-    return source.format(title, nav, content)
+    return source.format(title, nav, datetime.now().strftime("%Y/%m/%d_%H:%M:%S"), content)
 
 
 def make_content_source(pagename, sections_source):
@@ -305,7 +314,7 @@ def make_content_source(pagename, sections_source):
 def make_section_source(num, secname, images_source):
     # num, secname, images_source
     source = """
-        <div id="{}">{}</div>
+        <div class="section" id="{}">{}</div>
         <ul class="thumbnail">
         {}
         </ul>
