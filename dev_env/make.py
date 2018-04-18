@@ -37,6 +37,8 @@ Kohei Matsumoto
     - 'Last Updated'の追加
 * 3.02 (2018/04/12)
     - Menuが長いと省略し一行で表示
+* 3.03 (2018/04/18)
+    - windowサイズに応じて横並び数を変更
 """
 
 
@@ -238,14 +240,29 @@ def make_html_source(title, nav, content):
         <!-- drawer.js -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/drawer/3.2.2/js/drawer.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        </head>
         <style>
         body {{
         margin: 0;
-        padding: 0 1.5vw 0 2vw;
+        padding: 0 2vw 0 1.5vw;
         }}
-        </style>
-        </head>
-        <style>
+        img {{
+        width: 31vw;
+        margin: 0 0.5vw 0 0.5vw;
+        }}
+        @media screen and (min-width: 540px) {{
+        img {{
+        width: 23vw;
+        }}
+        }}
+        @media screen and (min-width: 720px) {{
+        body {{
+        padding: 0 2.5vw 0 2vw;
+        }}
+        img {{
+        width: 18vw;
+        }}
+        }}
         ul.thumbnail {{
         list-style-type: none;
         margin: 0;
@@ -255,10 +272,6 @@ def make_html_source(title, nav, content):
         li.thumbnail {{
         float: left;
         margin: 0;
-        }}
-        img {{
-        width: 31vw;
-        margin: 0 0.5vw 0 0.5vw;
         }}
         br {{
         clear: left;
