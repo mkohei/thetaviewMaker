@@ -39,6 +39,8 @@ Kohei Matsumoto
     - Menuが長いと省略し一行で表示
 * 3.03 (2018/04/18)
     - windowサイズに応じて横並び数を変更
+* 3.04 (2018/06/22)
+    - PngImageFile has no attribute '_getexif' への対応
 """
 
 
@@ -387,6 +389,8 @@ def make_thumb(PATH, filename):
 def isTakenByTheta(PATH, filename):
     # open
     img = Image.open(PATH + "/photos/" + filename)
+    if not hasattr(img, '_getexif'):
+        return False
     return "THETA" in img._getexif()[EXIF_MODEL]
 
 
