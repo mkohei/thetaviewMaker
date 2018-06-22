@@ -41,6 +41,8 @@ Kohei Matsumoto
     - windowサイズに応じて横並び数を変更
 * 3.04 (2018/06/22)
     - PngImageFile has no attribute '_getexif' への対応
+* 3.05 (2018/06/22)
+    - リンク用のタグを下から付けて恒久タグに対応
 """
 
 
@@ -180,7 +182,7 @@ def make_htmls(setdata, PATH, photos):
                         open("{}/views/{}.html".format(PATH, img), "w").write(make_theta_view_source(PATH, img))
                     else:
                         images_source += make_image_source(img)
-            sections_source += make_section_source(i, section["secname"], images_source)
+            sections_source += make_section_source(len(page["sections"])-i-1, section["secname"], images_source)
         open("{}/pages/{}.html".format(PATH, page["pagename"]), "w").write(
             make_html_source(
                 page["pagename"], nav, 
@@ -196,7 +198,7 @@ def make_nav_source(setdata):
     for page in setdata:
         secitems = ""
         for i, sec in enumerate(page["sections"]):
-            secitems += make_sec_item(i, sec["secname"])
+            secitems += make_sec_item(len(page["sections"])-1-i, sec["secname"])
         pageitems += make_page_item(page["pagename"]+".html", page["pagename"], secitems)
     return pageitems
 
