@@ -391,6 +391,8 @@ def isTakenByTheta(PATH, filename):
     img = Image.open(PATH + "/photos/" + filename)
     if not hasattr(img, '_getexif'):
         return False
+    if EXIF_MODEL not in img._getexif():
+        return False
     return "THETA" in img._getexif()[EXIF_MODEL]
 
 
