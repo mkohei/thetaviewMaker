@@ -43,6 +43,8 @@ Kohei Matsumoto
     - PngImageFile has no attribute '_getexif' への対応
 * 3.05 (2018/06/22)
     - リンク用のタグを下から付けて恒久タグに対応
+* 3.06 (2018/07/02)
+    - 「古い年度へのリンクを押しても新しい年度に飛んでしまう」バグへの対応
 """
 
 
@@ -198,7 +200,7 @@ def make_nav_source(setdata):
     for page in setdata:
         secitems = ""
         for i, sec in enumerate(page["sections"]):
-            secitems += make_sec_item(len(page["sections"])-1-i, sec["secname"])
+            secitems += make_sec_item(page["pagename"]+".html", len(page["sections"])-1-i, sec["secname"])
         pageitems += make_page_item(page["pagename"]+".html", page["pagename"], secitems)
     return pageitems
 
@@ -218,12 +220,12 @@ def make_page_item(url, name, secitems):
     return source.format(url, make_abbreviation(name), secitems)
 
 
-def make_sec_item(num, name):
+def make_sec_item(pagename, num, name):
     # num, name
     source = """
-        <li><a class="drawer-dropdown-menu-item" href="#{}">{}</a></li>
+        <li><a class="drawer-dropdown-menu-item" href="{}#{}">{}</a></li>
     """
-    return source.format(num, make_abbreviation(name))
+    return source.format(pagename, num, make_abbreviation(name))
 
 
 def make_html_source(title, nav, content):
